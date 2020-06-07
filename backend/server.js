@@ -13,7 +13,9 @@ app.use(fileUpload({
     limits: {
         fileSize: 2 * 1024 * 1024 * 1024, //2MB max file(s) size
         files: 2
-    }
+    },
+    abortOnLimit: true,
+    debug: true
 }));
 
 // other middleware
