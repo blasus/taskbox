@@ -7,15 +7,15 @@ https://www.learnstorybook.com/intro-to-storybook/react/en/get-started/
 - [x] Task list;
 - [x] Pinned tasks;
 - [x] Archived tasks;
-- [] tasks with due date;
-- [] Completed tasks page;
-- [] Recycle bin;
-- [] Set priority;
-- [] Task descriptions and attachments;
-- [] Markdown language;
-- [] Natural language to build tasks;
-- [] Calendar layout;
-- [] Themes
+- [ ] tasks with due date;
+- [ ] Completed tasks page;
+- [ ] Recycle bin;
+- [ ] Set priority;
+- [ ] Task descriptions and attachments;
+- [ ] Markdown language;
+- [ ] Natural language to build tasks;
+- [ ] Calendar layout;
+- [ ] Themes
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
