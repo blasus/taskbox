@@ -1,18 +1,39 @@
 // Task component definition
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
-export default function Task({ task: { id, title, state }, onArchiveTask, onPinTask }) {
+export default function Task(
+    { 
+        task: { id, title, completed, pinned, discontinued, due }, 
+        onCompleteTask, 
+        onPinTask, 
+        onDeleteTask
+    }
+) {
+
+    const showDue = () => {
+        const remaining = due - Date.now();
+        if(remaining > 0) {
+            const days = moment.duration(moment(due).diff(moment())).asDays();
+            return <span className="remaining">{days}</span>
+        } else {
+            return <span className="expired">Overdue</span>
+        }
+    };
+
+    const className = completed ? "completed" : (pinned ? "pinned" : ""); 
+
     return (
-        <div className={`list-item ${state}`}>
+        <div className={`list-item ${className}`}>
             <label className="checkbox">
                 <input 
                     type="checkbox"
-                    defaultChecked={state === 'TASK_ARCHIVED'}
+                    defaultChecked={completed}
                     disabled={true}
                     name="checked"
                 />
-                <span className="checkbox-custom" onClick={() => onArchiveTask(id)} />
+                <span className="checkbox-custom" onClick={() => onCompleteTask(id)} />
             </label>
             <div className="title">
                 <input 
@@ -22,11 +43,11 @@ export default function Task({ task: { id, title, state }, onArchiveTask, onPinT
                     placeholder="Input title"
                     style={{ width: '95%', textOverflow: 'ellipsis' }} 
                 />
+                {showDue}
             </div>
 
             <div className="actions" onClick={event => event.stopPropagation()}>
-                {state !== 'TASK_ARCHIVED' && (
-                    //eslint-disable-next-line jsx-a11y/anchor-is-valid
+                {!completed && (
                     <a onClick={() => onPinTask(id)}>
                         <span className={`icon-star`} />
                     </a>
@@ -40,8 +61,12 @@ Task.propTypes = {
     task: PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        state: PropTypes.string.isRequired
+        completed: PropTypes.bool,
+        pinned: PropTypes.bool,
+        discontinued: PropTypes.bool,
+        due: PropTypes.instanceOf(Date)
     }),
-    onArchiveTask: PropTypes.func,
-    onPinTask: PropTypes.func
+    onCompleteTask: PropTypes.func,
+    onPinTask: PropTypes.func,
+    onDeleteTask: PropTypes.func
 }
