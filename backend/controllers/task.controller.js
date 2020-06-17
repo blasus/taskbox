@@ -11,7 +11,7 @@ module.exports = app => {
     app.get('/tasks', (req, res) => {
         Task.find(
             { discontinued: false },
-            'title description pinned completed created_at due_date',
+            'title description pinned completed discontinued created_at due_date',
             (err, docs) => {
                 if (err) {
                     console.log(err);
@@ -35,6 +35,8 @@ module.exports = app => {
             } else if(!task) {
                 res.status(404).send("Task is not found");
             } else {
+
+                /** @todo get the reference to the attachment */
                 res.status(200).json(task);
             }
         });
@@ -48,14 +50,15 @@ module.exports = app => {
     const addAttachment = (taskId, file) => {
         try {
             // first upload the file into the server
-            file.mv('./uploads/' + file.name);
+            const path = './uploads/' + file.name + '_' + taskId;
+            file.mv(path);
     
             // then save also a reference to the file in the db
             const newAttachment = new Attachment({
                 name: file.name,
                 mimeType: file.mimetype,
                 size: file.size,
-                path: './uploads/' + file.name
+                path: path
             });
     
             return Attachment.create(newAttachment).then(docFile => {
@@ -64,7 +67,7 @@ module.exports = app => {
                     taskId,
                     {
                         $push: {
-                            attachments: docFile
+                            attachment: docFile
                         }
                     },
                     { new: true, useFindAndModify: false }
@@ -95,15 +98,13 @@ module.exports = app => {
             });
             newTask
                 .save()
-                .then((task) => {
+                .then(async (task) => {
                     
                     let doc = task;
                     // upload the new files
                     if (req.files) {
-                        const attachments = req.files.attachments;
-                        attachments.forEach(async (file) => {
-                            doc = await addAttachment(task.id, file);
-                        });
+                        const attachment = req.files.attachment;
+                        doc = await addAttachment(task.id, attachment);
                     }
 
                     res.status(201).send(doc);
@@ -139,6 +140,8 @@ module.exports = app => {
                 task.completed = completed;
                 task.discontinued = discontinued;
                 task.due_date = due;
+
+                /** @todo update attachment ref */
 
                 task.save().then(() => {
                     res.json('Task updated!');

@@ -7,18 +7,16 @@ const Task = new Schema(
     {
         title: {
             type: String,
-            required: [true, 'Title for a task is required']
+            required: [true, 'Title for a task is required'],
+            maxLength: 250
         },
         description: {
-            type: String
+            type: String,
+            maxlength: 1000
         },
-        attachments: {
-            type: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Attachment'
-                }
-            ]
+        attachment: {
+            type: Schema.Types.ObjectId,
+            ref: 'Attachment'
         },
         pinned: {
             type: Boolean,

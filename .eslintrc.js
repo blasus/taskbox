@@ -29,5 +29,17 @@ module.exports = {
         "react/jsx-filename-extension": "off",
         "react/jsx-one-expression-per-line": "off",
         "max-classes-per-file": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": [
+                "**/*.spec.js",
+                "**/*.spec.jsx",
+                "**/*.test.js"
+            ],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 };
