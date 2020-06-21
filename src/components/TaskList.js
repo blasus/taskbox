@@ -2,11 +2,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Task from './Task';
+import AddTask from './AddTask';
 import { connect } from 'react-redux';
-import { completeTask, pinTask, deleteTask } from '../actions/TaskActions';
+import { addTask, editTask, completeTask, pinTask, deleteTask } from '../actions/TaskActions';
 
-export function PureTaskList({ loading, tasks, onPinTask, onCompleteTask, onDeleteTask }) {
+export function PureTaskList(
+    { 
+        loading, 
+        tasks, 
+        onAddTask,
+        onEditTask,
+        onPinTask, 
+        onCompleteTask, 
+        onDeleteTask 
+    }
+) {
     const events = {
+        onAddTask,
+        onEditTask,
         onPinTask,
         onCompleteTask,
         onDeleteTask
@@ -34,8 +47,10 @@ export function PureTaskList({ loading, tasks, onPinTask, onCompleteTask, onDele
         );
     }
 
+    let listView;
+
     if(tasks.length === 0) {
-        return (
+        listView = (
             <div className="list-items">
                 <div className="wrapper-message">
                     <span className="icon-check" />
@@ -44,19 +59,26 @@ export function PureTaskList({ loading, tasks, onPinTask, onCompleteTask, onDele
                 </div>
             </div>
         );
+    } else {
+        const tasksInOrder = [
+            ...tasks.filter(t => t.pinned),
+            ...tasks.filter(t => !(t.pinned || t.completed)),
+            ...tasks.filter(t => t.completed)
+        ];
+
+        listView = (
+            <div className="list-items">
+                {tasksInOrder.map(task => (
+                    <Task key={task.id} task={task} {...events} />
+                ))}
+            </div>
+        );
     }
 
-    const tasksInOrder = [
-        ...tasks.filter(t => t.pinned),
-        ...tasks.filter(t => !(t.pinned || t.completed)),
-        ...tasks.filter(t => t.completed)
-    ];
-
     return (
-        <div className="list-items">
-            {tasksInOrder.map(task => (
-                <Task key={task.id} task={task} {...events} />
-            ))}
+        <div>
+            <AddTask />
+            {listView}
         </div>
     );
 }
@@ -64,6 +86,8 @@ export function PureTaskList({ loading, tasks, onPinTask, onCompleteTask, onDele
 PureTaskList.propTypes = {
     loading: PropTypes.bool,
     tasks: PropTypes.arrayOf(Task.propTypes.task).isRequired, 
+    onAddTask: PropTypes.func.isRequired,
+    onEditTask: PropTypes.func.isRequired,
     onPinTask: PropTypes.func.isRequired, 
     onCompleteTask: PropTypes.func.isRequired,
     onDeleteTask: PropTypes.func.isRequired
@@ -74,11 +98,15 @@ PureTaskList.defaultProps = {
 };
 
 export default connect(
+    // map state to props
     ({ tasks }) => ({
         // take only the active and completed task, the others will be shown on recycle bin
         tasks: tasks.filter(t => !t.discontinued),
     }),
+    // map dispatch to props
     dispatch => ({
+        onAddTask: id => dispatch(addTask(id)),
+        onEditTask: id => dispatch(editTask(id)),
         onCompleteTask: id => dispatch(completeTask(id)),
         onPinTask: id => dispatch(pinTask(id)),
         onDeleteTask: id => dispatch(deleteTask(id))

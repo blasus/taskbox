@@ -1,11 +1,13 @@
 // Task component definition
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 
 export default function Task(
     { 
-        task: { id, title, completed, pinned, discontinued, due }, 
+        task: { id, title, completed, pinned, discontinued, due },
+        onEditTask,
         onCompleteTask, 
         onPinTask, 
         onDeleteTask
@@ -24,6 +26,7 @@ export default function Task(
 
     const className = completed ? "completed" : (pinned ? "pinned" : ""); 
 
+    /** @todo add a reference to a modal view containing the form to edit task */
     return (
         <div className={`list-item ${className}`}>
             <label className="checkbox">
@@ -35,6 +38,7 @@ export default function Task(
                 />
                 <span className="checkbox-custom" onClick={() => onCompleteTask(id)} />
             </label>
+            <button className="edit-btn" onClick={() => onEditTask(id)} ><FontAwesomeIcon icon="edit" /></button>
             <div className="title">
                 <input 
                     type="text" 
@@ -66,7 +70,8 @@ Task.propTypes = {
         discontinued: PropTypes.bool,
         due: PropTypes.instanceOf(Date)
     }),
-    onCompleteTask: PropTypes.func,
-    onPinTask: PropTypes.func,
-    onDeleteTask: PropTypes.func
+    onEditTask: PropTypes.func.isRequired,
+    onCompleteTask: PropTypes.func.isRequired,
+    onPinTask: PropTypes.func.isRequired,
+    onDeleteTask: PropTypes.func.isRequired
 }
