@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import task from './task';
+import tasks from './task';
 
 /**
  * combineReducers is important to understand. As your app might grow in size
@@ -10,7 +10,7 @@ import task from './task';
  * More info: http://rackt.org/redux/docs/api/combineReducers.html
  */
 const rootReducer = combineReducers({
-    task,
+    tasks,
     // other reducers
 });
 

@@ -13,7 +13,16 @@ const AddTask = ({ onAddTask }) => {
                     if (!input.value.trim()) {
                         return;
                     }
-                    onAddTask(input.value);
+                    // Generate a new task. This should be created
+                    // on server.
+                    const newTask = {
+                        title: input.value, 
+                        completed: false, 
+                        pinned: false, 
+                        discontinued: false, 
+                        due: new Date() 
+                    }
+                    onAddTask(newTask);
                     input.value = '';
                 }}
             >
@@ -32,4 +41,4 @@ AddTask.propTypes = {
     onAddTask: PropTypes.func.isRequired
 }
 
-export default connect({})(AddTask);
+export default connect(() => ({}))(AddTask);

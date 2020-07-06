@@ -6,7 +6,7 @@ import moment from 'moment';
 
 export default function Task(
     { 
-        task: { id, title, completed, pinned, discontinued, due },
+        task: { id, title, completed, pinned, due },
         onEditTask,
         onCompleteTask, 
         onPinTask, 
@@ -14,15 +14,14 @@ export default function Task(
     }
 ) {
 
-    const showDue = () => {
-        const remaining = due - Date.now();
-        if(remaining > 0) {
-            const days = moment.duration(moment(due).diff(moment())).asDays();
-            return <span className="remaining">{days}</span>
-        } else {
-            return <span className="expired">Overdue</span>
-        }
-    };
+    let showDue;
+    const remaining = due - Date.now();
+    if(remaining > 0) {
+        const days = moment.duration(moment(due).diff(moment())).asDays();
+        showDue = <span className="remaining">{days}</span>;
+    } else {
+        showDue = <span className="expired">Overdue</span>;
+    }
 
     const className = completed ? "completed" : (pinned ? "pinned" : ""); 
 
@@ -32,13 +31,13 @@ export default function Task(
             <label className="checkbox">
                 <input 
                     type="checkbox"
-                    defaultChecked={completed}
+                    checked={completed}
                     disabled={true}
                     name="checked"
                 />
                 <span className="checkbox-custom" onClick={() => onCompleteTask(id)} />
             </label>
-            <button className="edit-btn" onClick={() => onEditTask(id)} ><FontAwesomeIcon icon="edit" /></button>
+            
             <div className="title">
                 <input 
                     type="text" 
@@ -51,8 +50,11 @@ export default function Task(
             </div>
 
             <div className="actions" onClick={event => event.stopPropagation()}>
+                <a href="#" className="edit-btn" onClick={() => onEditTask(id)}>
+                    <FontAwesomeIcon className={`icon-edit`} icon="edit" />
+                </a>
                 {!completed && (
-                    <a onClick={() => onPinTask(id)}>
+                    <a href="#" className="pin-btn" onClick={() => onPinTask(id)}>
                         <span className={`icon-star`} />
                     </a>
                 )}

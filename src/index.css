@@ -861,6 +861,7 @@
    vertical-align: top;
    text-align: center;
    color: #eee;
+   margin: 0 5px;
  }
  .list-item .actions a:hover {
    color: #2cc5d2;
@@ -873,6 +874,9 @@
    line-height: 24px;
    line-height: 3rem;
    text-align: center;
+ }
+ .list-item .edit-btn, .list-item .edit-btn svg{
+   height: 100%;
  }
  .list-item.pinned .icon-star {
    color: #2cc5d2;

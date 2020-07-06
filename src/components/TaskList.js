@@ -18,7 +18,6 @@ export function PureTaskList(
     }
 ) {
     const events = {
-        onAddTask,
         onEditTask,
         onPinTask,
         onCompleteTask,
@@ -77,7 +76,7 @@ export function PureTaskList(
 
     return (
         <div>
-            <AddTask />
+            <AddTask onAddTask={onAddTask}/>
             {listView}
         </div>
     );
@@ -94,14 +93,15 @@ PureTaskList.propTypes = {
 };
 
 PureTaskList.defaultProps = {
-    loading: false
+    loading: false,
+    tasks: []
 };
 
 export default connect(
     // map state to props
-    ({ tasks }) => ({
+    (state) => ({
         // take only the active and completed task, the others will be shown on recycle bin
-        tasks: tasks.filter(t => !t.discontinued),
+        tasks: state.tasks.filter(t => !t.discontinued),
     }),
     // map dispatch to props
     dispatch => ({

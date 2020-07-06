@@ -1,4 +1,4 @@
-import { ActionTypes } from "../constants/ActionTypes";
+import ActionTypes from "../constants/ActionTypes";
 
 // The action creators bundle actions with the data required to execute them
 export const addTask = id => ({ type: ActionTypes.ADD_TASK, id });
