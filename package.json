@@ -44,7 +44,7 @@
     "@storybook/preset-create-react-app": "^3.0.0",
     "@storybook/react": "^5.3.19",
     "eslint": "^7.1.0",
-    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.1.0",
     "react-test-renderer": "^16.13.1"
   }
